@@ -1,10 +1,7 @@
 services:
   flux:
     build: .
-    image: flux-job-intelligence:latest
     restart: unless-stopped
-    ports:
-      - "8765:8765"
     environment:
       - PORT=8765
       - HOST=0.0.0.0
