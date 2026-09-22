@@ -35,12 +35,17 @@ _state = {
 }
 
 
-def _passes_role_and_location_filter(job: dict) -> bool:
-    """F2: filter for target roles and UK/Remote locations only."""
+def _role_and_location_hits(job: dict):
     role_haystack = f"{job.get('title', '')} {job.get('description', '')}"
     role_hit = bool(detect_roles(role_haystack))
     location_haystack = f"{job.get('location', '')} {job.get('description', '')}"
     location_hit = any(p.search(location_haystack) for p in QUALIFYING_LOCATION_PATTERNS)
+    return role_hit, location_hit
+
+
+def _passes_role_and_location_filter(job: dict) -> bool:
+    """F2: filter for target roles and UK/Remote locations only."""
+    role_hit, location_hit = _role_and_location_hits(job)
     return role_hit and location_hit
 
 
@@ -80,7 +85,34 @@ def run_scan_once() -> dict:
             except Exception as exc:  # a single source must never take the scan down
                 per_source.append({"name": name, "count": 0, "ok": False, "error": str(exc)})
 
-    filtered = [j for j in fetched if _passes_role_and_location_filter(j)]
+    filtered = []
+    role_hit_count = 0
+    location_hit_count = 0
+    rejected_sample = []
+    for job in fetched:
+        role_hit, location_hit = _role_and_location_hits(job)
+        if role_hit:
+            role_hit_count += 1
+        if location_hit:
+            location_hit_count += 1
+        if role_hit and location_hit:
+            filtered.append(job)
+        elif len(rejected_sample) < 15:
+            rejected_sample.append({
+                "source": job.get("source"),
+                "title": job.get("title"),
+                "location": job.get("location"),
+                "role_hit": role_hit,
+                "location_hit": location_hit,
+            })
+    debug = {
+        "total_fetched": len(fetched),
+        "role_hits": role_hit_count,
+        "location_hits": location_hit_count,
+        "both_hits": len(filtered),
+        "rejected_sample": rejected_sample,
+    }
+
     for job in filtered:
         job["roles"] = detect_roles(f"{job.get('title', '')} {job.get('description', '')}")
         job["role"] = job["roles"][0] if job["roles"] else None
@@ -108,7 +140,9 @@ def run_scan_once() -> dict:
 
     now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     with _scan_lock:
-        _state.update({"last_scan": now, "scanning": False, "sources": per_source, "error": None})
+        _state.update({
+            "last_scan": now, "scanning": False, "sources": per_source, "error": None, "debug": debug,
+        })
 
     return {"last_scan": now, "total_jobs": len(merged), "new_alerts": new_alerts, "sources": per_source}
 
