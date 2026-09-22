@@ -132,6 +132,7 @@ class Handler(BaseHTTPRequestHandler):
             "cv_roles": cv["roles"] if cv else [],
             "filter_role": cv.get("filter_role") if cv else None,
             "sources": state.get("sources", []),
+            "debug": state.get("debug", {}),
         }
         self._send_json(200, payload)
 
