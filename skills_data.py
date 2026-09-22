@@ -162,7 +162,9 @@ UK_LOCATION_PATTERN = re.compile(
     r"\bunited kingdom\b|\buk\b|\bengland\b|\bscotland\b|\bwales\b|\bnorthern ireland\b|\blondon\b",
     re.IGNORECASE,
 )
-REMOTE_LOCATION_PATTERN = re.compile(r"\bremote\b|\bwork from home\b|\bwfh\b", re.IGNORECASE)
+REMOTE_LOCATION_PATTERN = re.compile(
+    r"\bremote\b|\bwork from home\b|\bwfh\b|\bworldwide\b|\banywhere\b|\bglobal\b|\binternational\b|\bdistributed\b",
+    re.IGNORECASE,
 EUROPE_LOCATION_PATTERN = re.compile(r"\beurope\b|\beu\b", re.IGNORECASE)
 UAE_LOCATION_PATTERN = re.compile(r"\buae\b|\bdubai\b|\babu dhabi\b", re.IGNORECASE)
 
