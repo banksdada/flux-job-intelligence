@@ -43,6 +43,13 @@ BOOKMARKS_FILE = DATA_DIR / "bookmarks.json"
 REED_API_KEY = os.environ.get("REED_API_KEY", "").strip()
 ADZUNA_APP_ID = os.environ.get("ADZUNA_APP_ID", "").strip()
 ADZUNA_APP_KEY = os.environ.get("ADZUNA_APP_KEY", "").strip()
+JOOBLE_API_KEY = os.environ.get("JOOBLE_API_KEY", "").strip()
+CAREERJET_AFFILIATE_ID = os.environ.get("CAREERJET_AFFILIATE_ID", "").strip()
+
+# Careerjet requires a "url of the page that will display results" on every
+# request — there's no real visitor page for a background scan, so this is
+# just where Flux itself is reachable.
+FLUX_PUBLIC_URL = os.environ.get("FLUX_PUBLIC_URL", "https://fluxjobs.baseuse.xyz")
 
 # --- Scanning ---
 SCAN_INTERVAL_SECONDS = int(os.environ.get("FLUX_SCAN_INTERVAL", str(5 * 60)))

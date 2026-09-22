@@ -58,15 +58,16 @@ The app binds `0.0.0.0:8765` by default (both are overridable via
 
 ## Job sources
 
-The spec names 14 sources. Real scraping of LinkedIn/Indeed/etc. either
-violates their Terms of Service or requires a commercial partner
-agreement, so sources split into three groups — full detail and every
-adapter's status in [SOURCES.md](./SOURCES.md):
+The spec names 14 sources; four more (Arbeitnow, The Muse, Jooble,
+Careerjet) were added afterward for broader coverage. Real scraping of
+LinkedIn/Indeed/etc. either violates their Terms of Service or requires
+a commercial partner agreement, so sources split into three groups —
+full detail and every adapter's status in [SOURCES.md](./SOURCES.md):
 
-- **Live, no key needed (5):** Jobicy, Himalayas, RemoteOK, Remotive,
-  We Work Remotely
-- **Live, needs a free API key you register for yourself (2):** Reed,
-  Adzuna — disabled until you set their env vars
+- **Live, no key needed (7):** Jobicy, Himalayas, RemoteOK, Remotive,
+  We Work Remotely, Arbeitnow, The Muse
+- **Live, needs a free API key/ID you register for yourself (4):** Reed,
+  Adzuna, Jooble, Careerjet — each disabled until you set its env vars
 - **Documented stubs (7):** LinkedIn, Indeed, Guardian Jobs, cwjobs,
   Totaljobs, ContractorUK, efinancialcareers — each has no viable free
   API; `sources/stubs.py` explains why and `sources/base.py` documents
