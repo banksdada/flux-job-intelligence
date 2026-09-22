@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Flux — Job Intelligence</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header class="app-header">
+  <div>
+    <h1>🌊 Flux</h1>
+    <span class="subtitle">CV-matched job intelligence — runs entirely on your own server</span>
+  </div>
+  <div class="header-actions">
+    <label for="cv-input" class="visually-hidden">Upload CV</label>
+    <button type="button" id="upload-btn">📄 Upload CV</button>
+    <input type="file" id="cv-input" accept=".docx,.txt,.md" class="visually-hidden">
+    <button type="button" id="scan-btn">🔄 Scan now</button>
+    <button type="button" id="alerts-btn" aria-pressed="false">🔔 Enable alerts</button>
+  </div>
+</header>
+
+<div class="status-line" id="status-line" role="status" aria-live="polite">Loading…</div>
+
+<main>
+  <section class="cv-panel" id="cv-panel" hidden></section>
+
+  <section class="filters" aria-label="Filters">
+    <div class="filter-field">
+      <label for="f-role">Role type</label>
+      <select id="f-role">
+        <option value="all">All</option>
+        <option value="project">Project Manager</option>
+        <option value="programme">Programme Manager</option>
+        <option value="delivery">Delivery Manager</option>
+        <option value="agile_delivery">Agile Delivery Manager</option>
+        <option value="scrum_master">Scrum Master</option>
+        <option value="business_analyst">Business Analyst</option>
+      </select>
+    </div>
+    <div class="filter-field">
+      <label for="f-band">Quality band</label>
+      <select id="f-band">
+        <option value="all">All</option>
+        <option value="Strong">Strong (80+)</option>
+        <option value="Good">Good (65-79)</option>
+        <option value="Stretch">Stretch (50-64)</option>
+      </select>
+    </div>
+    <div class="filter-field">
+      <label for="f-location">Location</label>
+      <select id="f-location">
+        <option value="all">All</option>
+        <option value="uk">🇬🇧 United Kingdom</option>
+        <option value="remote">🌍 Remote worldwide</option>
+      </select>
+    </div>
+    <div class="filter-field">
+      <label for="f-posted">Posted</label>
+      <select id="f-posted">
+        <option value="all">All time</option>
+        <option value="30">Last 30m</option>
+        <option value="60">Last 1h</option>
+        <option value="180">Last 3h</option>
+        <option value="360">Last 6h</option>
+        <option value="720">Last 12h</option>
+        <option value="1440">Last 24h</option>
+      </select>
+    </div>
+    <div class="filter-field">
+      <label for="f-type">Employment type</label>
+      <select id="f-type">
+        <option value="all">All</option>
+        <option value="contract">Contract</option>
+        <option value="full-time">Full-time</option>
+        <option value="remote">Remote</option>
+      </select>
+    </div>
+    <div class="filter-field">
+      <label for="f-bookmarks">Bookmarks</label>
+      <select id="f-bookmarks">
+        <option value="all">All</option>
+        <option value="saved">Saved only</option>
+        <option value="unsaved">Not saved</option>
+      </select>
+    </div>
+  </section>
+
+  <div class="toolbar">
+    <span class="result-count" id="result-count" aria-live="polite"></span>
+    <div class="filter-field sort-field">
+      <label for="f-sort">Sort</label>
+      <select id="f-sort">
+        <option value="score">Highest score → Recency</option>
+        <option value="latest">Latest posted first</option>
+        <option value="oldest">Oldest first</option>
+      </select>
+    </div>
+  </div>
+
+  <div id="job-grid" class="job-grid" aria-live="polite"></div>
+  <p class="empty-state" id="empty-state" hidden>No jobs match your filters yet. Try widening them, or click "Scan now".</p>
+
+  <nav class="pagination" id="pagination" aria-label="Pagination" hidden>
+    <button type="button" id="prev-page">← Prev</button>
+    <span id="page-indicator"></span>
+    <button type="button" id="next-page">Next →</button>
+  </nav>
+</main>
+
+<div class="toast" id="toast" role="alert" hidden></div>
+
+<template id="job-card-template">
+  <article class="job-card">
+    <div class="job-card-top">
+      <div>
+        <a class="job-title-link" target="_blank" rel="noopener noreferrer"></a>
+        <div class="job-meta job-company-location"></div>
+        <div class="job-meta job-source-posted"></div>
+      </div>
+      <span class="score-badge"></span>
+    </div>
+    <div class="gap-list"></div>
+    <div class="job-card-footer">
+      <button type="button" class="detail-toggle" aria-expanded="false">Score breakdown ▾</button>
+      <button type="button" class="bookmark-btn" aria-pressed="false" aria-label="Bookmark this job">☆</button>
+    </div>
+    <div class="job-detail" hidden></div>
+  </article>
+</template>
+
+<script src="/app.js"></script>
+</body>
+</html>

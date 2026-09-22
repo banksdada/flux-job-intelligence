@@ -1,0 +1,26 @@
+services:
+  flux:
+    build: .
+    image: flux-job-intelligence:latest
+    restart: unless-stopped
+    ports:
+      - "8765:8765"
+    environment:
+      - PORT=8765
+      - HOST=0.0.0.0
+      - FLUX_DATA_DIR=/app/data
+      # Optional — leave blank to run with only the key-free sources.
+      - REED_API_KEY=${REED_API_KEY:-}
+      - ADZUNA_APP_ID=${ADZUNA_APP_ID:-}
+      - ADZUNA_APP_KEY=${ADZUNA_APP_KEY:-}
+    volumes:
+      - flux_data:/app/data
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8765/api/health', timeout=3)"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+volumes:
+  flux_data:
